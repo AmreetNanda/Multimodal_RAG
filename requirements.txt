@@ -1,0 +1,27 @@
+pandas
+numpy
+seaborn
+matplotlib
+scikit-learn
+langchain
+langchain_community
+langchain-core
+langchain-classic
+langchainhub
+ipykernel
+streamlit
+python-dotenv
+sse_starlette
+bs4
+chromadb
+faiss-cpu
+beautifulsoup4
+pypdf2
+pdfplumber
+pillow
+sentence-transformers
+requests
+tqdm
+
+# -e .
+
