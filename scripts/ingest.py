@@ -42,9 +42,22 @@ def main(args):
 
 
     # Save the Hybrid index
-    hybrid_indexer = HybridIndexer(bm25_indexer, vector_indexer)
+    # hybrid_indexer = HybridIndexer(bm25_indexer, vector_indexer)
+    # with open(args.output_file, "wb") as f:
+    #     pickle.dump(hybrid_indexer, f)
+
+    # Save vector index separately
+    vector_indexer.save("index/vector")
+
+    # Save hybrid config (lightweight)
+    hybrid_meta = {
+    "bm25_index_dir": args.bm25_index,
+    "vector_index_dir": "index/vector",
+    "alpha": 0.5
+    }
     with open(args.output_file, "wb") as f:
-        pickle.dump(hybrid_indexer, f)
+        pickle.dump(hybrid_meta, f)
+    logger.info("Hybrid index metadata saved")
     logger.info(f"Hybrod index saved to {args.output_file}")
 
 if __name__=="__main__":

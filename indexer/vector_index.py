@@ -1,6 +1,8 @@
 import faiss 
 import numpy as np
 from sentence_transformers import SentenceTransformer
+import os
+import pickle
 
 class VectorIndexer:
     """
@@ -32,3 +34,14 @@ class VectorIndexer:
             if i <len(self.docs):
                 results.append(self.docs[i])
         return results
+    
+    def save(self, path):
+        os.makedirs(path, exist_ok=True)
+        faiss.write_index(self.index, os.path.join(path, "faiss.index"))
+        with open(os.path.join(path, "docs.pkl"), "wb") as f:
+            pickle.dump(self.docs, f)
+
+    def load(self, path):
+        self.index = faiss.read_index(os.path.join(path, "faiss.index"))
+        with open(os.path.join(path, "docs.pkl"), "rb") as f:
+            self.docs = pickle.load(f)

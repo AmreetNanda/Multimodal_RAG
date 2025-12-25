@@ -4,6 +4,9 @@ from reranker.multimodal_reranker import MultimodalReranker
 from generator.answer_generator import AnswerGenerator
 from dashboard.latency_tracker import LatencyTracker
 from dashboard.ranking_metrics import RankingMetrics
+from indexer.bm25_index import BM25Indexer
+from indexer.vector_index import VectorIndexer
+from indexer.hybrid_index import HybridIndexer
 from utils.logger import get_logger
 
 logger = get_logger("RunQuery")
@@ -20,9 +23,23 @@ GROUND_TRUTH = {
 
 def main(args):
     # Load hybrid index
-    with open(args.hybrid_index_file,"rb") as f:
-        hybrid_indexer = pickle.load(f)
+    # with open(args.hybrid_index_file,"rb") as f:
+    #     hybrid_indexer = pickle.load(f)
     
+    with open(args.hybrid_index_file, "rb") as f:
+        hybrid_meta = pickle.load(f)
+
+    bm25_indexer = BM25Indexer(index_dir=hybrid_meta["bm25_index_dir"])
+
+    vector_indexer = VectorIndexer()
+    vector_indexer.load(hybrid_meta["vector_index_dir"])
+
+    hybrid_indexer = HybridIndexer(
+    bm25_indexer,
+    vector_indexer,
+    alpha=hybrid_meta.get("alpha", 0.5)
+    )
+
     reranker = MultimodalReranker()
     answer_gen = AnswerGenerator()
     latency = LatencyTracker()
