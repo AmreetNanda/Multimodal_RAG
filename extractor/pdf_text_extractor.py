@@ -23,5 +23,5 @@ class PDFTextExtractor:
             logger.info(f"Extracted text from {pdf_file} ({len(text_content)} chars)")
         except Exception as e:
             logger.error(f"Failed to extract {pdf_file} : {e}")
-        return {"file": pdf_file, "content":text_content}
+        return {"file": pdf_file, "content":text_content, "type":"pdf"}
     

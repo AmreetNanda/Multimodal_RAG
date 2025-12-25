@@ -1,7 +1,7 @@
 import argparse
 import pickle
-from crawler.pdf_crawler import PDFCrawler
 from crawler.image_crawler import ImageCrawler
+from crawler.pdf_crawler import PDFCrawler
 from extractor.pdf_text_extractor import PDFTextExtractor
 from extractor.image_object_extractor import ImageObjectExtractor
 from indexer.bm25_index import BM25Indexer
@@ -66,7 +66,7 @@ if __name__=="__main__":
     parser.add_argument("--image_dirs", nargs="+", required=True)
     parser.add_argument("--bm25_index", type=str, default="index/bm25")
     parser.add_argument("--output_file", type=str, default="index/hybrid/hybrid_index.pkl")
-    args = parser.parse.args()
+    args = parser.parse_args()
     main(args)
 
 

@@ -1,4 +1,5 @@
-from ollama import Ollama
+# from ollama import Ollama
+from langchain_community.llms import Ollama
 from utils.logger import get_logger
 import requests
 

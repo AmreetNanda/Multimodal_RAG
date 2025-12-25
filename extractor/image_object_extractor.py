@@ -1,5 +1,6 @@
 from PIL import Image
-from ollama import Ollama
+# from ollama import Ollama
+from langchain_community.llms import Ollama
 from utils.logger import get_logger
 import requests
 import base64
@@ -62,4 +63,4 @@ class ImageObjectExtractor:
 
         except Exception as e:
             logger.error(f"Image extraction failed {image_path}: {e}")
-            return {"file": image_path, "content": ""}
+            return {"file": image_path, "content": "description", "type":"image"}
