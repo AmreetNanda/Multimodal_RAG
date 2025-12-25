@@ -1,4 +1,4 @@
-<img width="358" height="29" alt="image" src="https://github.com/user-attachments/assets/8d9a586b-32f1-40c6-9598-6d3c8d250e1b" /># 🧠 Local Multimodal RAG System (PDF + Images)
+# 🧠 Local Multimodal RAG System (PDF + Images)
 
 **A local, GPU-friendly Multimodal Retrieval-Augmented Generation (RAG) system that ingests PDFs and images, builds hybrid search indices (BM25 + Vector), reranks results using a multimodal LLM (LLaVA via Ollama), and generates concise answers with sources. All with a Streamlit dashboard for metrics and latency visualization.**
 ---
