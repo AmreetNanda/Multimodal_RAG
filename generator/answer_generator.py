@@ -8,7 +8,11 @@ class AnswerGenerator:
     Generates final answers from the multimodal top-k candidates (PDF text + image objects) using LLaVA / BakLLaVA in Ollama
     """
 
-    def __init__(self, query, candidates, max_tokens=300):
+    def __init__(self, model_name = "llava-phi3"):
+        self.model_name = model_name
+        self.ollama = Ollama(model_name)
+
+    def generate_answer(self, query, candidates, max_tokens=300):
         """
         query: str
         candidates: list of {"file":..., "content":...}
