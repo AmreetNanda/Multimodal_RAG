@@ -40,12 +40,6 @@ def main(args):
     vector_indexer = VectorIndexer()
     vector_indexer.add_documents(all_docs)
 
-
-    # Save the Hybrid index
-    # hybrid_indexer = HybridIndexer(bm25_indexer, vector_indexer)
-    # with open(args.output_file, "wb") as f:
-    #     pickle.dump(hybrid_indexer, f)
-
     # Save vector index separately
     vector_indexer.save("index/vector")
 

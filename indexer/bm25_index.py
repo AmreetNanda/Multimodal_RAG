@@ -1,4 +1,4 @@
-from whoosh.index import create_in, open_dir
+from whoosh.index import create_in, open_dir,exists_in
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.qparser import QueryParser
 import os
@@ -14,12 +14,14 @@ class BM25Indexer:
             file = ID(stored=True, unique=True),
             content = TEXT(stored = True)
         )
-
         if not os.path.exists(index_dir):
             os.makedirs(index_dir)
-            self.ix = create_in(index_dir, self.schema)
-        else:
+        
+        # Check if index exists
+        if exists_in(index_dir):
             self.ix = open_dir(index_dir)
+        else:
+            self.ix = create_in(index_dir, self.schema)
     
     def add_documents(self, docs):
         """

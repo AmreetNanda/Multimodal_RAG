@@ -1,66 +1,31 @@
 from PIL import Image
-# from ollama import Ollama
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM
 from utils.logger import get_logger
-import requests
-import base64
 
 logger = get_logger("ImageObjectExtractor")
 
 class ImageObjectExtractor:
     """
-    Uses LLaVa / BakLLaVa to extract objects, captions or text from images
+    Uses LLaVA/BakLLaVA via OllamaLLM to extract objects, captions, or text from images.
     """
-
-    def __init__(self, model_name = "llava-phi3"):
-        self.ollama = Ollama(model_name)
+    def __init__(self, model_name="llava-phi-3"):
         self.model_name = model_name
-
-    # def extract(self, image_path):
-    #     """
-    #     Returns structured text describing image objects or captions
-    #     """
-
-    #     prompt = f""" 
-    #     Analyze the image at {image_path} and descibe all objects, tables, diagrams, or text in it. Output in concise descriptive text.
-    #     """
-
-    #     try:
-    #         response = self.ollama.generate(prompt=prompt, max_tokens = 200)
-    #         description = response.text.strip()
-    #         logger.info(f"Extracted objects from {image_path} ({len(description)} chars)")
-    #         return {"file":image_path, "content": description}
-    #     except Exception as e:
-    #         logger.error(f"Failed to extract objects from {image_path}: {e}")
-    #         return {"file":image_path, "content":""}
-
+        self.ollama = OllamaLLM(model=model_name)
 
     def extract(self, image_path):
+        """
+        Returns structured text describing image objects or captions.
+        """
+        prompt = f"""
+        Analyze the image at {image_path} and describe all objects, tables, diagrams, or text in it.
+        Output concise descriptive text.
+        """
         try:
-            with open(image_path, "rb") as f:
-                image_b64 = base64.b64encode(f.read()).decode("utf-8")
-
-            prompt = (
-                "Describe all objects, text, tables, or diagrams in this image. "
-                "Be concise and factual."
-            )
-
-            response = requests.post(
-                "http://localhost:11434/api/generate",
-                json={
-                    "model": self.model_name,
-                    "prompt": prompt,
-                    "images": [image_b64],
-                    "stream": False
-                },
-                timeout=120
-            )
-
-            description = response.json()["response"].strip()
-            logger.info(f"Extracted image content from {image_path}")
-
-            return {"file": image_path, "content": description}
-
+            response = self.ollama.generate(prompt=prompt)
+            description = response.text.strip() if response else ""
+            logger.info(f"Extracted objects from {image_path} ({len(description)} chars)")
+            return {"file": image_path, "content": description, "type": "image"}
         except Exception as e:
-            logger.error(f"Image extraction failed {image_path}: {e}")
-            return {"file": image_path, "content": "description", "type":"image"}
+            logger.error(f"Failed to extract objects from {image_path}: {e}")
+            return {"file": image_path, "content": "", "type": "image"}
+
