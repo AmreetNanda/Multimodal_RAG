@@ -1,7 +1,13 @@
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import streamlit as st
 from dashboard.latency_tracker import LatencyTracker
 from dashboard.ranking_metrics import RankingMetrics
 import random
+
+
 
 st.title("Local Multimodal RAG Dashboard")
 
@@ -19,7 +25,6 @@ st.bar_chart(latency_tracker.summary())
 st.subheader("Sample Ranking Metrics")
 precision = random.uniform(0.5,1.0)
 recall = random.uniform(0.5,1.0)
-st.caption("Demo data (replace with real pipeline metrics)")
 
 st.write(f"Precision@10: {precision:.2f}")
 st.write(f"Recall@10: {recall:.2f}")
