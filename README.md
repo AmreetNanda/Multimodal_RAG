@@ -1,6 +1,6 @@
-# 🧠 Local Multimodal RAG System (PDF + Images)
+<img width="358" height="29" alt="image" src="https://github.com/user-attachments/assets/8d9a586b-32f1-40c6-9598-6d3c8d250e1b" /># 🧠 Local Multimodal RAG System (PDF + Images)
 
-** A local, GPU-friendly Multimodal Retrieval-Augmented Generation (RAG) system that ingests PDFs and images, builds hybrid search indices (BM25 + Vector), reranks results using a multimodal LLM (LLaVA via Ollama), and generates concise answers with sources — all with a Streamlit dashboard for metrics and latency visualization.**
+**A local, GPU-friendly Multimodal Retrieval-Augmented Generation (RAG) system that ingests PDFs and images, builds hybrid search indices (BM25 + Vector), reranks results using a multimodal LLM (LLaVA via Ollama), and generates concise answers with sources. All with a Streamlit dashboard for metrics and latency visualization.**
 ---
 
 ## 🎯 Goal
@@ -69,8 +69,8 @@ Multimodal_RAG/
 │   └── __init__.py
 │
 ├── scripts/
-│   ├── ingest.py
-│   ├── run_query.py
+│   ├── ingest.py                    # crawl + extract + build indices
+│   ├── run_query.py                 # interactive multimodal Q&A 
 │   └── __init__.py
 │
 ├── data/
@@ -207,7 +207,7 @@ docker exec -it <container_id> \
 ```
 
 
-### Docker Compose Section
+### 🐳 Docker Compose Section
 #### **Step 1: Start Everything**
 ```bash
 docker compose up --build
