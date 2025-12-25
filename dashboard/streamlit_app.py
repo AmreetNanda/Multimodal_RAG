@@ -19,6 +19,7 @@ st.bar_chart(latency_tracker.summary())
 st.subheader("Sample Ranking Metrics")
 precision = random.uniform(0.5,1.0)
 recall = random.uniform(0.5,1.0)
+st.caption("Demo data (replace with real pipeline metrics)")
 
 st.write(f"Precision@10: {precision:.2f}")
 st.write(f"Recall@10: {recall:.2f}")

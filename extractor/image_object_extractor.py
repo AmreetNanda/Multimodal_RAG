@@ -1,6 +1,8 @@
 from PIL import Image
 from ollama import Ollama
 from utils.logger import get_logger
+import requests
+import base64
 
 logger = get_logger("ImageObjectExtractor")
 
@@ -13,20 +15,51 @@ class ImageObjectExtractor:
         self.ollama = Ollama(model_name)
         self.model_name = model_name
 
+    # def extract(self, image_path):
+    #     """
+    #     Returns structured text describing image objects or captions
+    #     """
+
+    #     prompt = f""" 
+    #     Analyze the image at {image_path} and descibe all objects, tables, diagrams, or text in it. Output in concise descriptive text.
+    #     """
+
+    #     try:
+    #         response = self.ollama.generate(prompt=prompt, max_tokens = 200)
+    #         description = response.text.strip()
+    #         logger.info(f"Extracted objects from {image_path} ({len(description)} chars)")
+    #         return {"file":image_path, "content": description}
+    #     except Exception as e:
+    #         logger.error(f"Failed to extract objects from {image_path}: {e}")
+    #         return {"file":image_path, "content":""}
+
+
     def extract(self, image_path):
-        """
-        Returns structured text describing image objects or captions
-        """
-
-        prompt = f""" 
-        Analyze the image at {image_path} and descibe all objects, tables, diagrams, or text in it. Output in concise descriptive text.
-        """
-
         try:
-            response = self.ollama.generate(prompt=prompt, max_tokens = 200)
-            description = response.text.strip()
-            logger.info(f"Extracted objects from {image_path} ({len(description)} chars)")
-            return {"file":image_path, "content": description}
+            with open(image_path, "rb") as f:
+                image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+            prompt = (
+                "Describe all objects, text, tables, or diagrams in this image. "
+                "Be concise and factual."
+            )
+
+            response = requests.post(
+                "http://localhost:11434/api/generate",
+                json={
+                    "model": self.model_name,
+                    "prompt": prompt,
+                    "images": [image_b64],
+                    "stream": False
+                },
+                timeout=120
+            )
+
+            description = response.json()["response"].strip()
+            logger.info(f"Extracted image content from {image_path}")
+
+            return {"file": image_path, "content": description}
+
         except Exception as e:
-            logger.error(f"Failed to extract objects from {image_path}: {e}")
-            return {"file":image_path, "content":""}
+            logger.error(f"Image extraction failed {image_path}: {e}")
+            return {"file": image_path, "content": ""}

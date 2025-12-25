@@ -8,6 +8,7 @@ from indexer.bm25_index import BM25Indexer
 from indexer.vector_index import VectorIndexer
 from indexer.hybrid_index import HybridIndexer
 from utils.logger import get_logger
+from tqdm import tqdm
 
 logger = get_logger("IngestScript")
 
@@ -18,7 +19,7 @@ def main(args):
     pdf_files = pdf_crawler.crawl()
 
     pdf_extractor = PDFTextExtractor()
-    pdf_docs = [pdf_extractor.extract_text(f) for f in pdf_files]
+    pdf_docs = [pdf_extractor.extract_text(f) for f in tqdm(pdf_files)]
 
 
     #2. Crawl Images
@@ -26,7 +27,7 @@ def main(args):
     image_files = img_crawler.crawl()
 
     img_extractor = ImageObjectExtractor()
-    img_docs = [img_extractor.extract(f) for f in image_files]
+    img_docs = [img_extractor.extract(f) for f in tqdm(image_files)]
 
 
     #3. Combine Documents

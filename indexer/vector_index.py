@@ -25,6 +25,8 @@ class VectorIndexer:
     def search(self, query, top_k = 10):
         q_vec = self.model.encode([query], convert_to_numpy=True).astype("float32")
         D, I = self.index.search(q_vec, top_k)
+        if self.index.ntotal == 0:
+            return []
         results = []
         for i in I[0]:
             if i <len(self.docs):
